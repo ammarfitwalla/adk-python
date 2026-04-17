@@ -4894,3 +4894,9 @@ async def test_content_to_message_param_anthropic_no_signature_falls_back():
   # Falls back to reasoning_content when no signatures present
   assert result.get("reasoning_content") == "thinking without sig"
   assert "thinking_blocks" not in result
+
+def test_lite_llm_model_dump_excludes_llm_client():
+    """llm_client should not appear in model_dump output (not JSON serializable)."""
+    model = LiteLlm(model="openrouter/openai/gpt-4o-mini")
+    dumped = model.model_dump(mode="python", exclude_none=True)
+    assert "llm_client" not in dumped
